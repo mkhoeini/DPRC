@@ -76,12 +76,12 @@ problem out there for an application. How to make it Infinitly extensible.
 How to make it network transparent. How to make it Programming language
 agnostic. etc.
 
-All *Data*s, *Process*es, *Representation*s, And *Control*s are what I call
-compositing **Object**s of a program. They each live in their own separate
+All *Datas*, *Processes*, *Representations*, And *Controls* are what I call
+compositing **Objects** of a program. They each live in their own separate
 and isolated world. Each *Object* can live in its own thread, Process in the
-same machine, Or in a process over the network. So the way *object*s
+same machine, Or in a process over the network. So the way *objects*
 communicate is through [ZeroMQ](www.zeromq.org) ports.
-Actually, *Data*s, *Process*es, And *Representation*s only know the port of
+Actually, *Datas*, *Processes*, And *Representations* only know the port of
 their *Control*. And it is the *Control* wich links the other objects to each
 other. This way *Control* trully can control the communication between them,
 And agregates them together in an effective way.
