@@ -3,7 +3,7 @@ DPRC
 
 Data / Process / Representation / Control
 
-It is an extention of famous Model/View/Controller paradime.
+It is an extention of famous Model/View/Controller paradigm.
 
 Data
 ----
@@ -36,16 +36,6 @@ Control
 * What molds all part of the system together.
 
 
-The Relationship between these things
--------------------------------------
-
-* Everybody sees *Control*.
-* *Control* sees everybody.
-* *Data* sees nobody but itself (Except, obviously, control).
-* *Process* sees *Data*.
-* *Representation* sees *Process*.
-
-
 The MVGC
 --------
 
@@ -58,36 +48,46 @@ before the end.
 * *Control -> Controller*
 
 
+The Relationship between these things
+-------------------------------------
+
+* Everybody sees *Control*.
+* *Control* sees everybody.
+* *Data* sees nobody but itself (Except, obviously, control).
+* *Process* sees *Data*.
+* *Representation* sees *Process*.
+
+
 Implementation
 --------------
 
 I will try to make a simple implementation of this model here, with the help
 of C programming language.
-What I am trying to achive is to create a universal framework for Desktop
+What I am trying to achieve is to create a universal framework for Desktop
 programs, so they could be written in any language, Extended in any language,
 And remain robust and highly extensible.
 
 The work here is a result of many hours of thinking about a text processor
 I was trying to write. And eventually I found out that what I was thinking
-was not *Text editor* related at all, but a model, an extension of MVC,
-wich could be applied to any desktop application.
+was not ``Text editor'' related at all, but a model, an extension of MVC,
+which could be applied to any desktop application.
 It isn't hard to think what led me to this model: I was trying to solve every
 problem out there for an application. How to make it Infinitly extensible.
 How to make it network transparent. How to make it Programming language
 agnostic. etc.
 
- *Data*s, *Process*es, *Representation*s, And *Control*s are all what I call
+All *Data*s, *Process*es, *Representation*s, And *Control*s are what I call
 compositing **Object**s of a program. They each live in their own separate
 and isolated world. Each *Object* can live in its own thread, Process in the
 same machine, Or in a process over the network. So the way *object*s
-communicate is through (ZeroMQ)[www.zeromq.org] ports.
+communicate is through [ZeroMQ](www.zeromq.org) ports.
 Actually, *Data*s, *Process*es, And *Representation*s only know the port of
 their *Control*. And it is the *Control* wich links the other objects to each
 other. This way *Control* trully can control the communication between them,
 And agregates them together in an effective way.
 
 The protocol used for data transport between objects is
-(MessagePack)[http://msgpack.org/]. There are two types of communication that
+[MessagePack](http://msgpack.org/). There are two types of communication that
 can occur: *Action* and *Event*.
 
 ###Action
@@ -109,7 +109,7 @@ The way it all works is as follows:
 The *Conttrol* is two folded. One part of it receives *Events*, The othe part
 emits *Actions*.
 These two parts are what the *Control* is specialized at.
- *Control* responds to an action which makes other object to register for a
+ Control responds to an action which makes other object to register for a
 certain kind of events. When that event is received, *Control* automatically
 emits an action to the registered object. This makes it possible to build
 special channels of communication between objects. When **Data** is created,
@@ -122,12 +122,27 @@ consequently makes sure that **Data** receives the apropriate action as the
 result. Here, in between, if someone wishes to intercept with the channel he
 can do that as a **Control** plugin.
 
-*Actions* and *Events* are what I call them generally as *messages*. *Messages*
-are the *verbs* of communication and job in the **DPRC**. As the result,
-objects are just a composition of a bunch of handlers to the *messsages*.
+The *Actions* and *Events* are what I call them generally as *messages*.
+Messages are the *verbs* of communication and job in the **DPRC**. As the
+result, objects are just a composition of a bunch of handlers to the
+messsages.
 
 All objects are plugin-able. A plug in is just a piece code which modifies
 existing handlers or adds new ones.
+
+
+Further things to work on
+-------------------------
+
+The main problem with this model is that the components are highly separated
+and weakly linked together. So if a component fails others wouldn't notice.
+But because all of the components are crutial to the system, and their
+functionality is irreplacable by other parts of the system, if One fails
+all of the system fails, silently.
+
+I want to enforce that any part of the system can fail at any time. For that
+to work I need to specify a common solution for uncover a failure, and recover
+from it.
 
 
 License
